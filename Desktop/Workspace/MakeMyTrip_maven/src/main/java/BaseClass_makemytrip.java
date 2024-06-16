@@ -2,6 +2,7 @@ import java.time.Duration;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -24,7 +25,8 @@ public class BaseClass_makemytrip {
 		driver.get("https://www.makemytrip.com/");
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+		JavascriptExecutor js = (JavascriptExecutor) driver;
 
 		try {System.out.println("switching in frame");
 		driver.switchTo().frame(driver.findElement(By.cssSelector("#webklipper-publisher-widget-container-notification-frame")));
@@ -74,53 +76,25 @@ public class BaseClass_makemytrip {
 			}
 		} 
 
-		//code for date pick-up
 
-		List<WebElement> months = driver.findElements(By.cssSelector("div[class='DayPicker-Months'] >div")); 
+		//code for date departure date pick-up
+		String Departure_month="Jul";
+		String Departure_date ="05";
 
-		int i=0;
-		String selectdate = "14";
-		for (WebElement month : months) {
-			i= i+1;
-			if (month.getText().contains("July")) 
-			{				 
-				System.out.println("======================");
-				System.out.println(month.findElement(By.cssSelector("div[class='DayPicker-Body']  > div:nth-child("+i+")")).getText());
-				System.out.println("======================");
-				List<WebElement> weekdates = month.findElements(By.cssSelector("div[class='DayPicker-Body']  > div"));
-				
-				for (WebElement week:weekdates) {
-					System.out.println("------------");
-					System.out.println(week.getText());
-					System.out.println("------------");
-					System.out.println(week.findElement(By.cssSelector("div[class='DayPicker-Day']  > div >p")).getText());
-					if (week.findElement(By.cssSelector("div[class='DayPicker-Day']  > div >p")).getText().contains(selectdate)) {
-						System.out.println("--enter into 2nd loop-------");
-						System.out.println(week.getText());
-						System.out.println(week);
-						week.click();
-						System.out.println("---exist from 2nd loop------");
-						break;
-					}
-				}
-				
-				//=====
-//				for (WebElement date:weekdates) {
-//					System.out.println("enter into 2 for loop");
-//
-//					if (date.findElement(By.cssSelector("div[class='dateInnerCell']>p")).getText().contains(selectdate)) {
-//						System.out.println("---------");
-//						System.out.println(date.getText());
-//						date.click();
-//						System.out.println("---------");
-//						break;
-//					}
-//				}
-			}
+		System.out.println("div[aria-label*='"+Departure_month+ " "+ Departure_date+"']");
+		WebElement dateElement = driver.findElement(By.cssSelector("div[aria-label*='" + Departure_month + " " + Departure_date + "']"));
+		js.executeScript("arguments[0].scrollIntoView(true);", dateElement);
+		wait.until(ExpectedConditions.elementToBeClickable(dateElement));
+		js.executeScript("arguments[0].click();", dateElement);
+
+		//code for date arrival date pick-up
+		
+		
 
 
-		}
 
 
 	}
+
+
 }
