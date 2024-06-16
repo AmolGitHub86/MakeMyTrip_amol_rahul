@@ -16,7 +16,6 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class BaseClass_makemytrip {
 
-	@SuppressWarnings("unlikely-arg-type")
 	@Test
 	public void initialization() throws InterruptedException {
 
@@ -79,17 +78,75 @@ public class BaseClass_makemytrip {
 
 		//code for departure date pick-up
 		String Departure_month="Jul";
-		String Departure_date ="28";
+		String Departure_date ="29";
+
+		while(!driver.findElement(By.cssSelector("div[class='DayPicker-Caption']")).getText().contains(Departure_month)) {
+			driver.findElement(By.cssSelector("span[aria-label='Next Month']")).click();
+		}
+
 
 		System.out.println("div[aria-label*='"+Departure_month+ " "+ Departure_date+"']");
 		WebElement dateElement = driver.findElement(By.cssSelector("div[aria-label*='" + Departure_month + " " + Departure_date + "']"));
 		js.executeScript("arguments[0].scrollIntoView(true);", dateElement);
 		wait.until(ExpectedConditions.elementToBeClickable(dateElement));
-		js.executeScript("arguments[0].click();", dateElement);
+		js.executeScript("arguments[0].click();", dateElement);		
 
 		//code for date arrival date pick-up
+		String return_month = "Dec";
+		String return_day = "15";
+		driver.findElement(By.cssSelector("div[data-cy='returnArea']")).click();
+
+		while(!driver.findElement(By.cssSelector("div[class='DayPicker-Caption']")).getText().contains(return_month)) {
+			driver.findElement(By.cssSelector("span[aria-label='Next Month']")).click();
+		}
+
+		System.out.println("div[aria-label*='"+return_month+ " "+ return_day+"']");
+		WebElement dateElement_return = driver.findElement(By.cssSelector("div[aria-label*='" + return_month + " " + return_day + "']"));
+		//js.executeScript("arguments[0].scrollIntoView(true);", dateElement_return);
+		js.executeScript("window.scrollBy(0,150)");
+		dateElement_return.click();
+		//wait.until(ExpectedConditions.elementToBeClickable(dateElement_return));
+		//js.executeScript("arguments[0].click();", dateElement_return);	
+		
+		//code for traveller selection
+		int adult_count= 12;
+		int children_count= 9;
+		int infants_count=8;
+		String travel_class= "Economy";
+		String Special_fare_sel= "Doctor";
+		
+		driver.findElement(By.cssSelector("label[for='travellers']")).click();
+		//selection adult
+		if (adult_count<10) {
+			driver.findElement(By.cssSelector("li[data-cy='adults-"+adult_count+"']")).click();
+		}else
+		{
+			driver.findElement(By.cssSelector("li[data-cy='adults-10']")).click();
+		}
+		
+		//children selection
+		if (children_count<7) {
+			driver.findElement(By.cssSelector("li[data-cy='children-"+children_count+"']")).click();
+		}else {
+			driver.findElement(By.cssSelector("li[data-cy='children-7']")).click();
+		}
+		
+		//Infants selection
+		if(children_count<7) {
+			driver.findElement(By.cssSelector("li[data-cy='infants-"+infants_count+"']")).click();
+		}else {
+			driver.findElement(By.cssSelector("li[data-cy='infants-7']")).click();
+		}
+		
+		driver.findElement(By.xpath("//li[contains(text(),'"+travel_class+"')]")).click();		
+		driver.findElement(By.cssSelector("button[data-cy='travellerApplyBtn']")).click();
+		
+		driver.findElement(By.xpath("//div[contains(text(),'"+Special_fare_sel+"')]")).click();
+		driver.findElement(By.cssSelector("a[class='primaryBtn font24 latoBold widgetSearchBtn ']")).click();
 		
 		
+
+
 
 
 
