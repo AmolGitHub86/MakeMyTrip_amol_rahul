@@ -77,9 +77,9 @@ public class BaseClass_makemytrip {
 		} 
 
 
-		//code for date departure date pick-up
+		//code for departure date pick-up
 		String Departure_month="Jul";
-		String Departure_date ="05";
+		String Departure_date ="28";
 
 		System.out.println("div[aria-label*='"+Departure_month+ " "+ Departure_date+"']");
 		WebElement dateElement = driver.findElement(By.cssSelector("div[aria-label*='" + Departure_month + " " + Departure_date + "']"));
